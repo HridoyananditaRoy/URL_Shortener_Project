@@ -9,6 +9,7 @@ import connectDB from './src/config/mongo.config.js';
 import shortUrlRoutes from './src/routes/shortUrl.routes.js';
 import authRoutes from './src/routes/auth.routes.js';
 import cors from 'cors';
+import { authenticateUser } from './src/Middlewares/auth.middleware.js';
 
 
 const app = express();
@@ -27,10 +28,10 @@ app.use(express.urlencoded({extended:true})); //middleware to parse urlencoded d
 // app.post('/api/create',(req,res)=>{
 
 // })
-
+//app.use(authenticateUser); //middleware to authenticate user for protected routes
 app.use("/api/auth",authRoutes);
-app.use('/api/create',shortUrlRoutes); //goes to shortUrlRoutes for handling /api/create route
-app.get('/:id',shortUrlRoutes); //goes to shortUrlRoutes for handling /:id route
+app.use('/api/create',authenticateUser, shortUrlRoutes); //goes to shortUrlRoutes for handling /api/create routeapp.use('',shortUrlRoutes); //for /:id redirect route
+app.use("/", shortUrlRoutes);
 
 //start the server
 app.listen(5000,()=>{

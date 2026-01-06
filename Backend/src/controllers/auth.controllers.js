@@ -10,7 +10,7 @@ export const register_user = async (req, res) => {
     const { name, email, password } = req.body;
     const token = await registerUser({ name, email, password });
 
-    req.user = user; // Attach user to request object
+    // req.user = user; // Attach user to request object
     // Proceed to next middleware or route handler
     // Set cookie with token
     //on success, we get token
@@ -37,7 +37,6 @@ export const login_user = async (req, res) => {
     const { email, password } = req.body;
     const token = await loginUser({ email, password });
 
-    req.user = user; // Attach user to request object
     // Proceed to next middleware or route handler
     res.cookie("token", token, cookieOptions); // Set cookie with token
     res.status(200).json({ 
@@ -54,3 +53,26 @@ export const login_user = async (req, res) => {
     });
    }
 };
+
+
+// What req.user actually means
+
+// req.user means:
+
+// “This request is already authenticated”
+
+// It is set ONLY AFTER:
+
+// Client sends token
+
+// Middleware verifies token
+
+// Middleware attaches decoded user to request
+
+// Request
+//   ↓
+// JWT Middleware
+//   ↓
+// req.user = decodedUser
+//   ↓
+// Controller

@@ -1,9 +1,12 @@
 import express from 'express'; 
 import { createShortUrl, redirectUrl, createCustomUrl } from '../controllers/shorturl.controllers.js'; 
+import { authenticateUser } from '../Middlewares/auth.middleware.js';
+
 const router = express.Router();
 
-router.post('/',createShortUrl);
-router.get('/:id',redirectUrl);
-router.post('/custom',createCustomUrl);
+router.post('/', authenticateUser, createShortUrl);
+router.post('/custom', authenticateUser, createShortUrl); // or createCustomUrl
+router.get('/:id', redirectUrl);
+
 
 export default router;

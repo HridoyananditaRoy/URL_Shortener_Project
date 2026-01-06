@@ -27,21 +27,41 @@ import {
   findByShortUrl,
   findByLongUrl,
   saveShortUrl,
-} from "../dao/shortUrl.dao.js";
+} from "../dao/short_url.js";
 
-export const createShortUrlService = async (longUrl, userId = null) => {
+//If user logged in & slug provided-> use slug
+//else -> generate nanoid
+
+export const createShortUrlService = async (longUrl, userId = null, slug=null) => {
   // check if longUrl already exists
+  //If long url already exists, return the existing shortUrl
+
   const existing = await findByLongUrl(longUrl);
-  if (existing) return existing.shortUrl;
+  if (existing && !slug) return existing.shortUrl;
 
   let shortUrl;
-  let exists = true;
+//   let exists = true;
 
-  while (exists) {
-    shortUrl = generateNanoId(7);
-    exists = await findByShortUrl(shortUrl);
+  //If user is logged in and slug is provided -> use custom slug
+  if(slug){
+    //check if slug already exists
+    const slugExists = await findByShortUrl(slug);
+    if(slugExists){
+        throw new Error("Custom slug already exists");
+    }
+    shortUrl = slug;
+    // exists = false; //no need to check further
+  }
+  else{
+    // Generate unique shortUrl using nanoid
+    let exists = true;
+     while(exists){
+        shortUrl = generateNanoId(7);
+        exists = await findByShortUrl(shortUrl);
+     }
   }
 
+  //save to database
   const saved = await saveShortUrl({
     longUrl,
     shortUrl,
