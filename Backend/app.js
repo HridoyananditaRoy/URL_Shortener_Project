@@ -14,7 +14,10 @@ import { authenticateUser } from './src/Middlewares/auth.middleware.js';
 
 const app = express();
 
-app.use(cors()); //to allow cross origin requests from frontend to backend, good for development not for production
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+})); //to allow cross origin requests from frontend to backend, good for development not for production
 
 
 // import {nanoid} from 'nanoid';

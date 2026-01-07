@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
     baseURL: "http://localhost:5000", //base url for all requests
     //you can add headers here if needed
     timeout: 5000, //5 seconds timeout
+    withCredentials: true //to set cookies
 });
 
 //cookies are the way to store session data on client side

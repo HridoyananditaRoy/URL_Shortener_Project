@@ -30,7 +30,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
       const res = await LoginUser({ email, password });
       if (res.success) {
         setSuccess("Login Successful");
-        localStorage.setItem("token", res.token); // save token
         setTimeout(() => navigate("/"), 1000); // redirect to home
       } else {
         setError(res.message || "Login failed");

@@ -54,6 +54,20 @@ export const login_user = async (req, res) => {
    }
 };
 
+export const logout = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
+};
+
+
 
 // What req.user actually means
 

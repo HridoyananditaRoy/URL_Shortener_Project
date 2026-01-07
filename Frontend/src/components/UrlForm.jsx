@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { createShortUrl } from "../api/shortUrl.api.js";
+import Navbar from "../components/Navbar";
 
 const UrlForm = () => {
   // UseState is a react way to use a var
@@ -16,8 +17,8 @@ const UrlForm = () => {
   const [url, setUrlValue] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [copy, setCopied] = useState(false);
-  const [slug, setSlug] = useState(""); //new state for custom slug
- const [isLoggedIn, setIsLoggedIn] = useState(false);
+//   const [slug, setSlug] = useState(""); //new state for custom slug
+//  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
  
 
@@ -35,10 +36,6 @@ const UrlForm = () => {
 
   const handleSubmit = async () => {
     try {
-
-      const payload = isLoggedIn ? {url, slug} : {url};
-
-      cons res = 
 
       //fetch by default
       //axios is a popular library for making HTTP requests
@@ -75,12 +72,12 @@ const UrlForm = () => {
     }, 2000);
   };
 
-  //Check login status
-  useEffect(()=>{
-    axiosInstance.get("api/auth/me")
-    .then(()=> setIsLoggedIn(true))
-    .catch(()=>setIsLoggedIn(false))
-  })
+  // //Check login status
+  // useEffect(()=>{
+  //   axiosInstance.get("api/auth/me")
+  //   .then(()=> setIsLoggedIn(true))
+  //   .catch(()=>setIsLoggedIn(false))
+  // })
 
   //useQuery from react query to manage server state and caching
   //To fetch data on form submit
@@ -103,7 +100,9 @@ const UrlForm = () => {
 
 
   return (
-    <div className="space-y-4">
+<>
+<Navbar />
+    <div className="space-y-4 ">
       {/* Input group */}
       <div className="flex bg-gray-400 rounded-lg overflow-hidden shadow-lg">
         <input
@@ -111,17 +110,18 @@ const UrlForm = () => {
           value={url} //Bind the input value to the state variable
           placeholder="https://example.com"
           onChange={(e) => setUrlValue(e.target.value)} //Update the url value on input change
-          className="flex-1 px-4 py-3 text-gray-700 focus:outline-none"
+          className="flex-2 px-4 py-3 text-black focus:outline-none"
         />
+        </div>
         <button
           onClick={handleSubmit}
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white px-6 font-medium"
+          className="py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white px-4 font-medium "
         >
           Shorten URL
         </button>
-      </div>
-
+      
+      
       {/* Result */}
 
       {shortUrl && (
@@ -159,10 +159,15 @@ const UrlForm = () => {
                 {/* Show 'Copied!' if copied is true */}
               </button>
             </div>
+            
           </div>
         </div>
       )}
+       
     </div>
+    
+</>
+
   );
 };
 

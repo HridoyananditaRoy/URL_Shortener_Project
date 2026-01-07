@@ -3,7 +3,7 @@ import RegisterForm from "../components/RegisterForm";
 
 const AuthPage = () => {
   return (
-    <main className=" min-h-screen flex items-center justify-center bg-[#0b0f19] px-4">
+    <main className=" min-h-screen flex items-center justify-center bg-[#cfd2dc] px-4">
       <section className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-7">
     
         {/* Header */}
