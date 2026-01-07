@@ -16,6 +16,10 @@ const UrlForm = () => {
   const [url, setUrlValue] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [copy, setCopied] = useState(false);
+  const [slug, setSlug] = useState(""); //new state for custom slug
+ const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+ 
 
   console.log(url);
 
@@ -31,6 +35,11 @@ const UrlForm = () => {
 
   const handleSubmit = async () => {
     try {
+
+      const payload = isLoggedIn ? {url, slug} : {url};
+
+      cons res = 
+
       //fetch by default
       //axios is a popular library for making HTTP requests
       // console.log("Submitted URL:",url);
@@ -66,6 +75,13 @@ const UrlForm = () => {
     }, 2000);
   };
 
+  //Check login status
+  useEffect(()=>{
+    axiosInstance.get("api/auth/me")
+    .then(()=> setIsLoggedIn(true))
+    .catch(()=>setIsLoggedIn(false))
+  })
+
   //useQuery from react query to manage server state and caching
   //To fetch data on form submit
 
@@ -89,7 +105,7 @@ const UrlForm = () => {
   return (
     <div className="space-y-4">
       {/* Input group */}
-      <div className="flex bg-white rounded-lg overflow-hidden shadow-lg">
+      <div className="flex bg-gray-400 rounded-lg overflow-hidden shadow-lg">
         <input
           type="text"
           value={url} //Bind the input value to the state variable
