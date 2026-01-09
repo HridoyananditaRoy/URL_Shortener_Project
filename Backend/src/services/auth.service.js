@@ -17,13 +17,22 @@ export const registerUser = async({name, email, password})=>{
 
 
 export const loginUser = async({email,password})=>{
+    console.log("📧 Finding user with email:", email);
     const user = await findUserByEmail(email);
-
-    if(!user || user.password !== password){
-        throw new Error("Invalid credentials");
+    if(!user) {
+        console.log("❌ User not found");
+        throw new Error("Invalid email or password");
+    }
+    
+    console.log("✅ User found, comparing password...");
+    const isMatch = await user.comparePassword(password);
+    if(!isMatch) {
+        console.log("❌ Password mismatch");
+        throw new Error("Invalid email or password");
     }
 
-    const token = signToken({id: user._id}); //Took id from user found in DB
+    console.log("✅ Password matched, generating token");
+    const token = signToken({id: user._id});
     return token; // Return token to controller
 
 }

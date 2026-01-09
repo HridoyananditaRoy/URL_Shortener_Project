@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { LoginUser } from "../api/user.api";
 import {useEffect} from 'react';
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import {useSelector, useDispatch} from 'react-redux';
+import {login} from '../store/slice/authSlice.js'
 
 //react-router-dom ka main work React app me 
 // page navigation (routing) handle karna hota hai — without page reload.
@@ -9,13 +11,15 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 //❌ Without react-router-dom
 //Every navigation reloads the page
 
- const LoginForm = () => {
+ const LoginForm = ({ state }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
       const [success, setSuccess] = useState('');
   const location = useLocation(); 
-
+  const auth = useSelector((state)=>state.auth); //reading 
+  const dispatch = useDispatch();
+//console.log(auth);
 
   //Returns the current Location. This can be useful 
   // if you'd like to perform some side effect whenever it changes.
@@ -29,6 +33,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
     try {
       const res = await LoginUser({ email, password });
       if (res.success) {
+        // Token is already saved in cookies by backend
+        // Just update Redux state
+        const user = res.user || { email };
+        dispatch(login(user));
+        // Save user to localStorage for cookie restoration on refresh
+        localStorage.setItem('user', JSON.stringify(user));
         setSuccess("Login Successful");
         setTimeout(() => navigate("/"), 1000); // redirect to home
       } else {
@@ -57,15 +67,15 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
   return (
     <form 
       onSubmit={handleSubmit}
-      className="bg-white/95 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-sm mx-auto space-y-4"
+      className="bg-white backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-sm mx-auto space-y-4"
     >
-      <h2 className="text-3xl font-extrabold text-center text-gradient bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-500">
-        Login
+      <h2 className="text-3xl font-extrabold text-center text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-500">
+        Login Form
       </h2>
 
       {/* Success / Error Messages */}
-      {error && <p className="text-red-500 text-center">{error}</p>}
-      {success && <p className="text-green-500 text-center">{success}</p>}
+      {error && <p className="text-red-500 text-center">Login Unsuccessful! Try again!!</p>}
+      {success && <p className="text-green-500 text-center">Login Successful</p>}
 
       <input 
         type="email"

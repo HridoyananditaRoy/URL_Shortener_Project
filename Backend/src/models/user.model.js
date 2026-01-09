@@ -7,6 +7,11 @@ const userSchema = new mongoose.Schema({
   avatar: { type: String, required: false }  
 });
 
+userSchema.methods.comparePassword = async function(enteredPassword) {
+  return this.password === enteredPassword;
+}
+
+
 const User = mongoose.model("User", userSchema);
 
 export default User;

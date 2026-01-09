@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HomePage from "./pages/HomePage.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
+import Dashboard from "./components/DashBoard.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
 import AuthRegisterPage from "./pages/AuthRegisterPage.jsx"
 import {Routes, Route} from "react-router-dom"
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import { useDispatch } from "react-redux";
+import { login } from "./store/slice/authSlice.js";
 
 // React Router DOM is used for navigation in React apps without page reload
 
@@ -22,6 +26,32 @@ import {Routes, Route} from "react-router-dom"
 //-----------------------------------------------------------------------------
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Check if token cookie exists (set by backend)
+    // If token exists, user is logged in - restore auth state from localStorage
+    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
+    const userStr = localStorage.getItem('user'); // Get user from localStorage if available
+    
+    if (token) {
+      // Token cookie exists, restore auth state
+      if (userStr) {
+        // If user data exists in localStorage, use it
+        try {
+          const user = JSON.parse(userStr);
+          dispatch(login(user));
+        } catch (e) {
+          // If parse fails, just restore with minimal data
+          dispatch(login({ email: 'user' }));
+        }
+      } else {
+        // Token exists but no user data, still mark as authenticated
+        dispatch(login({ email: 'user' }));
+      }
+    }
+  }, [dispatch]);
+
   return (
     // <>
     //   {/* <HomePage /> */}
@@ -30,11 +60,15 @@ const App = () => {
     //     <AuthPage />
     //   </div>
     // </>
-    <Routes>
-      <Route path="/" element={<HomePage></HomePage>} />
-      <Route path="/login" element={<AuthPage></AuthPage>} />
-      <Route path="/register" element={<AuthRegisterPage />} />
-      </ Routes>
+   
+<Routes>
+  {/* 🔒 Protected - only logged-in users can access */}
+  <Route path="/" element={<ProtectedRoute element={<HomePage />} />} />
+  <Route path="/login" element={<AuthPage />} />
+  <Route path="/register" element={<AuthRegisterPage />} />
+  {/* Public - anyone can access */}
+  <Route path="/dashboard" element={<Dashboard />} />
+</Routes>
   );
 };
 

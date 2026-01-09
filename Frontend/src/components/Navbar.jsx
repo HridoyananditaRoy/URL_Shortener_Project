@@ -37,33 +37,63 @@
 // export default Navbar;
 
 import axiosInstance from "../utils/axiosInstance";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout as logoutAction } from "../store/slice/authSlice.js";
 
-const Navbar = () => {
+const Navbar = ({showLogout = true }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const auth = useSelector((s) => s.auth);
+  const isAuth = auth && auth.isAuthenticated;
+  const show = typeof showLogout === "boolean" ? showLogout : isAuth;
 
   const handleLogout = async () => {
     try {
       await axiosInstance.post("/api/auth/logout");
-
-      // 👇 force redirect after logout
-      navigate("/login", { replace: true });
-
+      // Backend clears the cookie
     } catch (error) {
       console.error("Logout failed", error);
-
-      // 👇 even if error, force logout UI
-      navigate("/login", { replace: true });
+    } finally {
+      // Clear Redux state
+      dispatch(logoutAction());
+      // Clear user from localStorage
+      localStorage.removeItem('user');
+      
+      // Redirect to dashboard after logout
+      navigate("/dashboard");
     }
   };
 
+  const handleLogin = () => {
+    navigate("/login");
+  };
+
+  const handleRegister = () => {
+    navigate("/register");
+  };
+
   return (
-    <button
-      onClick={handleLogout}
-      className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white"
-    >
-      Logout
-    </button>
+    <nav>
+      {show ? (
+        <div
+          className="gap-13 flex justify-end underline px-16 py-8 rounded text-2xl font-medium bg-blue-500"
+        >
+          <h1 className="mr-auto">URL Shortener</h1>
+          <p onClick={handleLogout} className="hover:text-white cursor-pointer">Logout</p>
+          <p onClick={handleRegister} className="hover:text-white cursor-pointer">Register</p>
+        </div>
+      ) : (
+        <div
+          className="gap-13 flex justify-end underline px-16 py-8 rounded text-2xl font-medium bg-blue-500"
+        >
+          <h1 className="mr-auto">URL Shortener</h1>
+          <p onClick={handleLogin} className="hover:text-white cursor-pointer">Login</p>
+          <p onClick={handleRegister} className="hover:text-white cursor-pointer">Register</p>
+        </div>
+      )}
+    </nav>
   );
 };
 

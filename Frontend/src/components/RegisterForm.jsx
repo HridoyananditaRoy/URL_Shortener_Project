@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { RegisterUser } from "../api/user.api";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../store/slice/authSlice.js";
 
 //react-router-dom ka main work React app me 
 // page navigation (routing) handle karna hota hai — without page reload.
+
 
 const RegisterForm = () => {
   const [name, setName] = useState("");
@@ -13,6 +16,7 @@ const RegisterForm = () => {
   const [success, setSuccess] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,8 +26,14 @@ const RegisterForm = () => {
     try {
       const res = await RegisterUser({ name, email, password });
       if (res.success) {
-        navigate("/login") //// redirect programmatically
-        setSuccess("Registration Successful! Redirecting to login...");
+        // Auto-login after registration
+        const user = { name, email };
+        dispatch(login(user));
+        // Save user to localStorage for cookie restoration on refresh
+        localStorage.setItem('user', JSON.stringify(user));
+        setSuccess("Registration Successful! Logging in...");
+        setTimeout(() => navigate("/"), 1000); // redirect to home
+
       } else {
         setError(res.message || "Registration failed");
       }
@@ -48,7 +58,9 @@ const RegisterForm = () => {
       onSubmit={handleSubmit}
       className="bg-white p-8 rounded shadow-md w-full max-w-sm space-y-4"
     >
-      <h2 className="text-2xl font-bold text-center">Register</h2>
+       <h2 className="text-3xl font-extrabold text-center text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-500">
+        Register Form
+      </h2>
 
       {error && <p className="text-red-500">{error}</p>}
       {success && <p className="text-green-500">{success}</p>}

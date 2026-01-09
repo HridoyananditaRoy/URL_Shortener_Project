@@ -35,18 +35,17 @@ export const register_user = async (req, res) => {
 export const login_user = async (req, res) => {
    try {
     const { email, password } = req.body;
+    console.log(" Login attempt:", { email, password: "***" }); // Log attempt
     const token = await loginUser({ email, password });
 
-    // Proceed to next middleware or route handler
-    res.cookie("token", token, cookieOptions); // Set cookie with token
+    res.cookie("token", token, cookieOptions);
     res.status(200).json({ 
         success: true,
         token,
         message: "User logged in successfully"
      });
    } catch (error) {
-    
-    //If invalid, sends error response
+    console.error("❌ Login error:", error.message); // Log the exact error
     res.status(400).json({
         success: false,
         message: error.message

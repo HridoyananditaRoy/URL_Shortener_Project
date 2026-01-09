@@ -5,7 +5,12 @@ export const LoginUser = async({password, email}) =>{
     //take password and login
 
     //Go in "api/auth/login" and take email, password and return
-    const {data} = await axiosInstance.post("/api/auth/login",{email,password});
+    
+//     👉 Because res in LoginForm is NOT Axios’ response.
+//      👉 It is just a variable holding whatever your API function returns.
+//       This is real axios, res is just variable holding my api
+    
+  const {data} = await axiosInstance.post("/api/auth/login",{email,password});
     return data; //return data -> email, password ...
 }
 

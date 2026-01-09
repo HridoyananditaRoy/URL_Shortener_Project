@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { createShortUrl } from "../api/shortUrl.api.js";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.jsx";
 
 const UrlForm = () => {
   // UseState is a react way to use a var
@@ -17,12 +17,7 @@ const UrlForm = () => {
   const [url, setUrlValue] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [copy, setCopied] = useState(false);
-//   const [slug, setSlug] = useState(""); //new state for custom slug
-//  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
- 
-
-  console.log(url);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // setUrlValue //It re renders the component when called as it updates the value
   //we can use fn inside event handlers to update the state
@@ -36,31 +31,13 @@ const UrlForm = () => {
 
   const handleSubmit = async () => {
     try {
-
-      //fetch by default
-      //axios is a popular library for making HTTP requests
-      // console.log("Submitted URL:",url);
-
-      // destructure {data} from the axios post response to get only data part
       //API Call to the backend to create short url
-
-      //------------------------------------------------
-      const shortUrl = await createShortUrl(url);
-      setShortUrl(shortUrl.shortUrl);
+      const result = await createShortUrl(url);
+      setShortUrl(result.shortUrl);
       setCopied(false); //reset copied state on new short url generation
-
-      //------------------------------------------------
-
-    //   const { data } = await axios.post("http://localhost:5000/api/create", {
-    //     url,
-    //   }); //{url:url} in ES6 when key and value are same we can write once
-    //   console.log(data);
-    //   setShortUrl(data.shortUrl);
-    //   setCopied(false); //reset copied state on new short url generation
     } catch (error) {
       console.error("Error creating short URL:", error);
     }
-    //  e.preventDefault(); //Prevent page reload on form submit //no refresh
   };
 
   const handleCopy = () => {
@@ -101,7 +78,7 @@ const UrlForm = () => {
 
   return (
 <>
-<Navbar />
+
     <div className="space-y-4 ">
       {/* Input group */}
       <div className="flex bg-gray-400 rounded-lg overflow-hidden shadow-lg">
@@ -113,6 +90,7 @@ const UrlForm = () => {
           className="flex-2 px-4 py-3 text-black focus:outline-none"
         />
         </div>
+        
         <button
           onClick={handleSubmit}
           type="submit"
@@ -120,7 +98,7 @@ const UrlForm = () => {
         >
           Shorten URL
         </button>
-      
+
       
       {/* Result */}
 
