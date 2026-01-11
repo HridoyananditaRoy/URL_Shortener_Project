@@ -1,16 +1,7 @@
 # **URL Shortener Project**
 
 A simple and efficient **URL Shortener** web application built with *React, Node.js, Express, and MongoDB*.  
-Users can shorten long URLs, manage their links, and access analytics.
-
----
-
-## **Table of Contents**
-
-- [Features](#features)  
-- [Tech Stack](#tech-stack)  
-- [Installation](#installation)  
-- [Usage](#usage)  
+Users can shorten long URLs, create custom URLs or slugs if logged in.
 
 ---
 
@@ -19,7 +10,6 @@ Users can shorten long URLs, manage their links, and access analytics.
 - **Shorten long URLs** into small, easy-to-share links  
 - **Redirect users** to the original URL when the short link is accessed  
 - **User authentication** and protected routes  
-- **Click analytics** tracking (optional)  
 - **Responsive** and user-friendly interface  
 
 ---
@@ -30,7 +20,7 @@ Users can shorten long URLs, manage their links, and access analytics.
 - **Backend:** Node.js, Express  
 - **Database:** MongoDB  
 - **Authentication:** JWT  
-- **Other Tools:** Vite, Tailwind CSS (optional)  
+- **Other Tools:** Vite, Tailwind CSS
 
 ---
 
@@ -48,7 +38,6 @@ Users can shorten long URLs, manage their links, and access analytics.
 ```bash
 git clone <your-repo-url>
 cd URL_Shortener_Project
-
 
 
 Install dependencies for backend
@@ -73,8 +62,6 @@ PORT=5000
 MONGO_URI=your_mongo_connection_string
 JWT_SECRET=your_jwt_secret
 
-
-Frontend .env:
 
 VITE_API_URL=http://localhost:5000/api
 
