@@ -8,6 +8,8 @@ export const register_user = async (req, res) => {
     //try–catch only prevents the server from crashing
     //  and lets you send a clean response to Postman.
     const { name, email, password } = req.body;
+    console.log("REQ BODY:", req.body);
+
     const token = await registerUser({ name, email, password });
 
     // req.user = user; // Attach user to request object
@@ -66,6 +68,16 @@ export const logout = (req, res) => {
   });
 };
 
+export  const get_current_user = (req,res)=>{
+    if (!req.user) {
+    return res.status(401).json({ success: false });
+  }
+
+  res.json({
+    success: true,
+    user: req.user,
+  });
+} 
 
 
 // What req.user actually means

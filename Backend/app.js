@@ -9,6 +9,7 @@ import connectDB from './src/config/mongo.config.js';
 import shortUrlRoutes from './src/routes/shortUrl.routes.js';
 import authRoutes from './src/routes/auth.routes.js';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { authenticateUser } from './src/Middlewares/auth.middleware.js';
 
 
@@ -27,6 +28,7 @@ app.use(cors({
 //to parse incoming request data and form data
 app.use(express.json()); //middleware to parse json data
 app.use(express.urlencoded({extended:true})); //middleware to parse urlencoded data
+app.use(cookieParser()); //middleware to parse cookies
 
 // app.post('/api/create',(req,res)=>{
 

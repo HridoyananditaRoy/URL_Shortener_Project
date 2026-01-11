@@ -8,7 +8,7 @@ const ProtectedRoute = ({ element }) => {
 
   // If logged in → show component
   // If NOT logged in → redirect to dashboard
-  return isAuthenticated ? element : <Navigate to="/dashboard" />;
+  return isAuthenticated ? element : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

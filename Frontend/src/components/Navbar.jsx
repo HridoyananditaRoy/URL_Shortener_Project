@@ -62,7 +62,7 @@ const Navbar = ({showLogout = true }) => {
       localStorage.removeItem('user');
       
       // Redirect to dashboard after logout
-      navigate("/dashboard");
+      navigate("/login");
     }
   };
 

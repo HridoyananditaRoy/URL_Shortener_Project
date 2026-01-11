@@ -10,29 +10,29 @@ export const registerUser = async({name, email, password})=>{
         throw new Error("User already exists");
     }
     const newUser = await createUser({name, email, password});
-    const token = signToken({id: newUser._id}); // Generate JWT token
+    const token = signToken({userId: newUser._id}); // Generate JWT token
     //signToken function from helper.js
     return token; // Return token to controller
 }
 
 
 export const loginUser = async({email,password})=>{
-    console.log("📧 Finding user with email:", email);
+    console.log("Finding user with email:", email);
     const user = await findUserByEmail(email);
     if(!user) {
-        console.log("❌ User not found");
+        console.log("User not found");
         throw new Error("Invalid email or password");
     }
     
     console.log("✅ User found, comparing password...");
     const isMatch = await user.comparePassword(password);
     if(!isMatch) {
-        console.log("❌ Password mismatch");
+        console.log("Password mismatch");
         throw new Error("Invalid email or password");
     }
 
     console.log("✅ Password matched, generating token");
-    const token = signToken({id: user._id});
+    const token = signToken({userId: user._id});
     return token; // Return token to controller
 
 }

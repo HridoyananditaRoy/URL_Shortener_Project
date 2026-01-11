@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { createShortUrl } from "../api/shortUrl.api.js";
 import Navbar from "../components/Navbar.jsx";
+import {useSelector} from "react-redux";
 
 const UrlForm = () => {
   // UseState is a react way to use a var
@@ -17,7 +18,10 @@ const UrlForm = () => {
   const [url, setUrlValue] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [copy, setCopied] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  // //as we used redux const isAuthenticated = useSelector(...) -> dont need loggedIn
+  const [slug, setSlug] = useState("");
+
 
   // setUrlValue //It re renders the component when called as it updates the value
   //we can use fn inside event handlers to update the state
@@ -32,7 +36,8 @@ const UrlForm = () => {
   const handleSubmit = async () => {
     try {
       //API Call to the backend to create short url
-      const result = await createShortUrl(url);
+    // || undefined -> Prevents sending empty string
+      const result = await createShortUrl({url, slug: slug || undefined,}); //only send if exists slug
       setShortUrl(result.shortUrl);
       setCopied(false); //reset copied state on new short url generation
     } catch (error) {
@@ -48,6 +53,10 @@ const UrlForm = () => {
       setCopied(false); //reset copied state after 2 seconds
     }, 2000);
   };
+
+  const isAuthenticated = useSelector(
+    (state) => state.auth.isAuthenticated
+  );
 
   // //Check login status
   // useEffect(()=>{
@@ -75,13 +84,20 @@ const UrlForm = () => {
 //     });
 //---------------------------------------------------------------------
 
+//Persistent auth means:
+//-------------------------------------------------------------
+// User stays logged in even after page refresh or browser reopen
+// Right now your auth is Redux-only, so it resets on refresh.
+//
 
   return (
 <>
 
     <div className="space-y-4 ">
+       <p>Enter your URL and custom URL as wish :)</p>
       {/* Input group */}
       <div className="flex bg-gray-400 rounded-lg overflow-hidden shadow-lg">
+        
         <input
           type="text"
           value={url} //Bind the input value to the state variable
@@ -89,8 +105,23 @@ const UrlForm = () => {
           onChange={(e) => setUrlValue(e.target.value)} //Update the url value on input change
           className="flex-2 px-4 py-3 text-black focus:outline-none"
         />
+       
         </div>
         
+{/* Before sending shortUrl btn user should enter slug */}
+       {
+        isAuthenticated && (
+           <input
+    type="text"
+    placeholder="Custom slug (optional)"
+    value={slug}
+    onChange={(e) => setSlug(e.target.value)}
+    className="w-full px-4 py-2 border rounded focus:outline-none"
+  />
+  
+        )
+       }
+
         <button
           onClick={handleSubmit}
           type="submit"
@@ -141,7 +172,7 @@ const UrlForm = () => {
           </div>
         </div>
       )}
-       
+      
     </div>
     
 </>

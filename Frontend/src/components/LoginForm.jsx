@@ -40,7 +40,7 @@ import {login} from '../store/slice/authSlice.js'
         // Save user to localStorage for cookie restoration on refresh
         localStorage.setItem('user', JSON.stringify(user));
         setSuccess("Login Successful");
-        setTimeout(() => navigate("/"), 1000); // redirect to home
+        setTimeout(() => navigate("/"), 500); // redirect to home
       } else {
         setError(res.message || "Login failed");
       }

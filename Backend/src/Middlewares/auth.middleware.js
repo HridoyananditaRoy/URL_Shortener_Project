@@ -51,27 +51,45 @@ export const authenticateUser = async (req, res, next) => {
       token = authHeader.split(" ")[1];
     }
 
-    // 2️⃣ If no token → user not logged in
+    // 2️⃣ If no token in header, check cookies
+    if (!token && req.cookies?.token) {
+      token = req.cookies.token;
+    }
+
+    // 3️⃣ If no token → user not logged in
     if (!token) {
-      req.user = null;
-      return next();
+      return res.status(401).json({
+    success: false,
+    message: "Not authenticated",
+  });
     }
 
     // 3️⃣ Decode token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("JWT_SECRET (verify):", process.env.JWT_SECRET);
+
+    console.log("Decoded token",decoded);
 
     // 4️⃣ Find user in DB
-    const user = await findUserById(decoded.id);
+    // const user = await findUserById(decoded.userId).select("-password"); //.select() only exists on queries, not documents. 
+    const user = await findUserById(decoded.userId);
     if (!user) {
-      req.user = null;
-      return next();
+      if (!user) {
+  return res.status(401).json({
+    success: false,
+    message: "User not found",
+  });
+}
+
     }
 
     // 5️⃣ Attach user to req
     req.user = user;
+    console.log(user);
     next();
   } catch (err) {
-    req.user = null;
-    next();
-  }
-};
+  return res.status(401).json({
+    success: false,
+    message: "Invalid or expired token",
+  });
+}}
