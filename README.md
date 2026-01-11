@@ -1,49 +1,54 @@
-URL Shortener Project
+# **URL Shortener Project**
 
-A simple and efficient URL Shortener web application built with React, Node.js, Express, and MongoDB. Users can shorten long URLs, manage their links, and access analytics.
+A simple and efficient **URL Shortener** web application built with *React, Node.js, Express, and MongoDB*.  
+Users can shorten long URLs, manage their links, and access analytics.
 
-Table of Contents
+---
 
+## **Table of Contents**
 
-Features
+- [Features](#features)  
+- [Tech Stack](#tech-stack)  
+- [Installation](#installation)  
+- [Usage](#usage)  
 
-Shorten long URLs into small, easy-to-share links.
+---
 
-Redirect users to the original URL when the short link is accessed.
+## **Features**
 
-User authentication and protected routes.
+- **Shorten long URLs** into small, easy-to-share links  
+- **Redirect users** to the original URL when the short link is accessed  
+- **User authentication** and protected routes  
+- **Click analytics** tracking (optional)  
+- **Responsive** and user-friendly interface  
 
-Track click analytics (optional: if implemented).
+---
 
-Responsive and user-friendly interface.
+## **Tech Stack**
 
-Tech Stack
+- **Frontend:** React, Redux, React Router, Axios  
+- **Backend:** Node.js, Express  
+- **Database:** MongoDB  
+- **Authentication:** JWT  
+- **Other Tools:** Vite, Tailwind CSS (optional)  
 
-Frontend: React, Redux, React Router, Axios
+---
 
-Backend: Node.js, Express
+## **Installation**
 
-Database: MongoDB
+### **Prerequisites**
 
-Authentication: JWT
+- Node.js >= 18.x  
+- npm or yarn  
+- MongoDB running locally or via MongoDB Atlas  
 
-Other Tools: Vite, Tailwind CSS (if used)
+### **Steps**
 
-Installation
-Prerequisites
-
-Node.js >= 18.x
-
-npm or yarn
-
-MongoDB running locally or a MongoDB Atlas account
-
-Steps
-
-Clone the repository
-
+1. **Clone the repository**
+```bash
 git clone <your-repo-url>
 cd URL_Shortener_Project
+
 
 
 Install dependencies for backend
